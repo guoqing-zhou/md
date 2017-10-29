@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include "io.h"
 
-IO::IO(class MD *md, char *infile){
-  
+IO::IO(class MD *md, const char *infile){
+  printf("File name %s\n", infile);
 }
 
 IO::IO(class MD *md){
@@ -12,7 +12,7 @@ IO::IO(class MD *md){
 
 
 IO::~IO(){
-  
+
 }
 
 void IO::init(){

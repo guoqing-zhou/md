@@ -1,0 +1,9 @@
+#example input file: md.in
+
+#first line
+rflag dir
+rflag=1: create the system
+
+
+
+#MPI IO

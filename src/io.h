@@ -7,12 +7,12 @@
 class IO {
   public:
     IO(class MD *);
-    IO(class MD *, char *);
+    IO(class MD *, const char *);
     ~IO();
-    void init(); //create an empty 
+    void init(); //create an empty
     void restart();
     void write_restart();
-  
+
   private:
     int write_flag; //flag to decide whether write the state when delete the class
 };
