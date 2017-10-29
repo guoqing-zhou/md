@@ -5,7 +5,7 @@
 using namespace std;
 
 MD::MD(int narg, char **arg, MPI_Comm){
-  io = new IO(this);
+  io = new IO(this,"md.in");
   io->init();
 }
 

@@ -6,6 +6,7 @@
 
 class IO {
   public:
+    IO(class MD *);
     IO(class MD *, char *);
     ~IO();
     void init(); //create an empty 

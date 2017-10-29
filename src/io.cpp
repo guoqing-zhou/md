@@ -2,9 +2,14 @@
 #include <stdio.h>
 #include "io.h"
 
-IO::IO(class MD *, char *infile="md.in"){
+IO::IO(class MD *md, char *infile){
   
 }
+
+IO::IO(class MD *md){
+  IO(md, "md.in");
+}
+
 
 IO::~IO(){
   
