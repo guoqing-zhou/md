@@ -1,6 +1,6 @@
 #include <mpi.h>
 #include <stdio.h>
-#include "input.h"
+#include "io.h"
 
 using namespace std;
 
@@ -10,7 +10,7 @@ using namespace std;
 class MD {
  public:
                                  
-  class Input *input;            // input script processing
+  class IO *io;                    // input script processing
   //class Atom *atom;              // atom-based quantities
   //class Update *update;          // integrators/minimizers
   //class Neighbor *neighbor;      // neighbor lists

@@ -4,11 +4,11 @@
 
 using namespace std;
 
-MD::MD(int, char **, MPI_Comm){
-  input = new Input();
-  input->test();
+MD::MD(int narg, char **arg, MPI_Comm){
+  io = new IO(this);
+  io->init();
 }
 
 MD::~MD(){
-  delete input;
+  delete io;
 }
