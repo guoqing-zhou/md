@@ -1,0 +1,6 @@
+#example input file: md.in
+
+command keywords
+
+box rect xlo xhi ylo yhi zlo zhi 
+create filename bcc xlo xhi ylo yhi zlo zhi 

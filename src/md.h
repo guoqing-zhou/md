@@ -1,6 +1,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include "io.h"
+#include "atom.h"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ class MD {
  public:
                                  
   class IO *io;                    // input script processing
-  //class Atom *atom;              // atom-based quantities
+  class Atom *atom;              // atom-based quantities
   //class Update *update;          // integrators/minimizers
   //class Neighbor *neighbor;      // neighbor lists
   //class Comm *comm;              // inter-processor communication
@@ -24,6 +25,7 @@ class MD {
   
   MD(int, char **, MPI_Comm);
   ~MD();
+  int test;
 /*
   void create();
   void post_create();
