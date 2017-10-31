@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "control.h"
 
+using namespace std;
+
 class Region {
 public:
   char *shape;

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <string>
+#include <string.h>
 #include "region.h"
 
 Region::Region(int narg, char **arg){

@@ -1,7 +1,7 @@
 #ifndef CONTROL_H
 #define CONTROL_H
 
-
+#include <stdlib.h>
 
 #define FLOAT float
 #define FORMAT_F f
