@@ -3,6 +3,7 @@
 
 #include <mpi.h>
 #include "md.h"
+/*
 using namespace std;
 
 class Pointers {
@@ -20,5 +21,5 @@ class Pointers {
   
 };
 
-
+*/
 #endif

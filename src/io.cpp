@@ -18,15 +18,12 @@ IO::IO(class MD *md, int narg, char **arg, MPI_Comm communicator) {
 void IO::init(class MD *md, MPI_Comm communicator){
   char buff[300];
   fp=fopen(infile, "r");
-  while((fgets(buff, 250, fp)) != NULL){   
+  while((fgets(buff, 250, fp)) != NULL){  
     parse(md, buff);
   }
     
   fclose(fp);
 
-  //MPI_Bcast(filename, filename_length*sizeof(char), MPI_CHAR, 0, communicator);
-  //MPI_Bcast(file_flag, command_length*sizeof(char), MPI_CHAR, 0, communicator);
-  //MPI_Barrier(communicator); 
 }
 
 IO::~IO(){
@@ -40,27 +37,38 @@ void IO::parse(class MD *md, char *line){
   char *pch;
   //split each line in the input file
   narg=string_narg(line);
+  if (narg==0) return;
+  
   arg = (char **)malloc(sizeof(char *)*narg);
-  if (narg>0){
-    pch = strtok(line, " ");
-    arg[0] = pch;
-    for (n=1; n<narg; n++){
-      pch = strtok (NULL, " ");
-      arg[n] = pch;
-    }
+  pch = strtok(line, " ");
+  arg[0] = pch;
+  for (n=1; n<narg; n++){
+    pch = strtok (NULL, " ");
+    arg[n] = pch;
   }
   
   if(strcmp(arg[0],"box")==0){
     md->atom->box_init(narg-1, arg+1);
   }
-  else if (strcmp(arg[0],"create")==0){
-    
+  else if (strcmp(arg[0],"procs")==0){
+    md->procs(narg-1, arg+1);
   }
-  
-  free(arg);
+  else if (strcmp(arg[0],"atom")==0){
+    md->atom->atom_init(narg-1, arg+1);
+  }
+  else if (strcmp(arg[0],"region")==0){
+    md->atom->add_region(narg-1, arg+1);
+  }
+  /*
+  else if (strcmp(arg[0],"create")==0){
+    md->atom->create(narg-1, arg+1);
+  }
+  */
+  if (arg != NULL) free(arg);
 }
 
-
+//count how many substrings in the string
+//and replace '\n' with '\0', '\t' with ' '
 inline int IO::string_narg(char *line){
   int l=strlen(line);
   int n=0, i;

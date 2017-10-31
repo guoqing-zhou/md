@@ -1,6 +1,19 @@
 #example input file: md.in
 
+units: 
+
 command keywords
 
+
+procs nx ny nz
+-processes in each direction
+
 box rect xlo xhi ylo yhi zlo zhi 
-create filename bcc xlo xhi ylo yhi zlo zhi 
+-create box with the rect shape and size specified
+
+atom N mass1 mass2 ... massN
+-specific the atom types and their masses
+
+create bcc LC
+-bcc: crystal structure
+-LC: lattice constant

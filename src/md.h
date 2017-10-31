@@ -1,12 +1,14 @@
+#ifndef MD_H
+#define MD_H
+
 #include <mpi.h>
 #include <stdio.h>
 #include "io.h"
 #include "atom.h"
+#include "control.h"
 
 using namespace std;
 
-#ifndef MD_H
-#define MD_H
 
 class MD {
  public:
@@ -16,7 +18,6 @@ class MD {
   //class Update *update;          // integrators/minimizers
   //class Neighbor *neighbor;      // neighbor lists
   //class Comm *comm;              // inter-processor communication
-  //class Domain *domain;          // simulation box
   //class Force *force;            // inter-particle forces
   //class Output *output;          // thermo/dump/restart
   //class Timer *timer;            // CPU timing info
@@ -25,7 +26,17 @@ class MD {
   
   MD(int, char **, MPI_Comm);
   ~MD();
-  int test;
+  void procs(int, char **);
+  
+  int my_rank, proc_flag;
+  int pnx, pny, pnz; //processors in each direction
+  int num_proc;
+  int proc_pos[3], proc_neigh[6]; 
+  //this proc postion
+  //six neighbors of current proc
+  
+private:
+  int proc_rank(int, int, int);
 /*
   void create();
   void post_create();

@@ -1,2 +1,5 @@
+procs 1 1 1
 box rect 0.0 100.0 0.0 100.0 0.0 100.0
-create ./tmp/state.md
+atom 2 1.0 1.0
+#region r1 rect 0.0 10.0 0.0 10.0 0.0 10.0
+create bcc 1.0 

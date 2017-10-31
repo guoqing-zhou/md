@@ -1,23 +1,35 @@
-#include <mpi.h>
-#include <stdio.h>
-
 #ifndef ATOM_H
 #define ATOM_H
-using namespace std;
 
-#define FLOAT float
-#define FORMAT_F f
-//used in sscanf scanf to read double/float data
+#include <mpi.h>
+#include <stdio.h>
+#include "control.h"
+#include "region.h"
+#include <map>
+using namespace std;
 
 class Atom {
   public:
     FLOAT **x, **v, **f;
     FLOAT xlo, xhi, ylo, yhi, zlo, zhi;
-    int box_flag;
+    FLOAT *mass;
+    int Natoms, types, box_flag; 
+    // numver of atoms in this procs, atom types, flag to check whether box is set
+    long long num_atoms, **id; // total number of atoms, id of the atom
+    //the type of the atom is also stored in the id
+    //as there will be trillion of atom, needs to use long long for id, (64 bits)
+    // the top 7 bits are used for types, ignore the sign bit 
+    // the rest of 56 bits are used for id
+    // there is no MPI unsigned long long type
     
+    map<char *, class Region *> regions;
+        
     Atom(class MD *, MPI_Comm);
     ~Atom();
     void box_init(int, char **);
+    void create(int, char **);
+    void atom_init(int, char **);
+    void add_region(int, char **);
 
   
 };
