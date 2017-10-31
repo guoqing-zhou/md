@@ -31,3 +31,28 @@ bool Region::isin(FLOAT x, FLOAT y, FLOAT z){
     exit(1);
   }
 }
+
+void Region::min_rect(FLOAT *para){
+  int i;
+  if (strcmp(shape, "rect")==0){
+    for (i=0; i<6; i++)
+      para[i]=parameters[i];
+  }
+  else {
+    printf("ERROR: Region::min_rect()\n");
+    exit(1);
+  }
+  
+}
+
+void Region::check(FLOAT *box){
+  FLOAT MinRect[6];
+  min_rect(MinRect);
+  if (MinRect[0]<box[0] || MinRect[1]>box[1] || MinRect[2]<box[2] || MinRect[3]>box[3] || MinRect[4]<box[4] || MinRect[5]>box[5]){
+    printf("region is out of the box\n");
+    exit(1);
+  }
+}
+
+
+

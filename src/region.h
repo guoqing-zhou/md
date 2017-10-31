@@ -12,6 +12,9 @@ public:
   FLOAT *parameters;
   Region(int, char **);
   bool isin(FLOAT, FLOAT, FLOAT); //check whether is in the region
+  void min_rect(FLOAT *);
+  void check(FLOAT *);
+    
 };
 
 #endif

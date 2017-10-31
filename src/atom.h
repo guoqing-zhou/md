@@ -11,7 +11,7 @@ using namespace std;
 class Atom {
   public:
     FLOAT **x, **v, **f;
-    FLOAT xlo, xhi, ylo, yhi, zlo, zhi;
+    FLOAT box[6]; //box dimension
     FLOAT *mass;
     int Natoms, types, box_flag; 
     // numver of atoms in this procs, atom types, flag to check whether box is set
@@ -22,14 +22,14 @@ class Atom {
     // the rest of 56 bits are used for id
     // there is no MPI unsigned long long type
     
-    map<char *, class Region *> regions;
+    map<const char *, class Region *> regions;
         
     Atom(class MD *, MPI_Comm);
     ~Atom();
     void box_init(int, char **);
     void create(int, char **);
     void atom_init(int, char **);
-    void add_region(int, char **);
+    void add_region(class MD *, int, char **);
 
   
 };

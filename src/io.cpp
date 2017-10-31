@@ -57,7 +57,17 @@ void IO::parse(class MD *md, char *line){
     md->atom->atom_init(narg-1, arg+1);
   }
   else if (strcmp(arg[0],"region")==0){
-    md->atom->add_region(narg-1, arg+1);
+    md->atom->add_region(md, narg-1, arg+1);
+    /*
+#ifdef DEBUG
+    if (md->atom->regions[arg[1]]->isin(11.0, 5.0, 5.0)){
+      printf("Atom (%f %f %f) in the region %s\n", 5.0, 5.0, 5.0, arg[1]);
+    }
+    else{
+      printf("Atom (%f %f %f) not in the region %s\n", 11.0, 5.0, 5.0, arg[1]);
+    }
+#endif
+    */
   }
   /*
   else if (strcmp(arg[0],"create")==0){

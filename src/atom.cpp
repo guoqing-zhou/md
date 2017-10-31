@@ -37,12 +37,12 @@ void Atom::atom_init(int narg, char **arg){
 
 void Atom::box_init(int narg, char **arg){
   if (strcmp(arg[0], "rect")==0 && narg==7){
-    sscanf(arg[1],"%FORMAT_F", &xlo);
-    sscanf(arg[2],"%FORMAT_F", &xhi);
-    sscanf(arg[3],"%FORMAT_F", &ylo);
-    sscanf(arg[4],"%FORMAT_F", &yhi);
-    sscanf(arg[5],"%FORMAT_F", &zlo);
-    sscanf(arg[6],"%FORMAT_F", &zhi);
+    sscanf(arg[1],"%FORMAT_F", &box[0]);
+    sscanf(arg[2],"%FORMAT_F", &box[1]);
+    sscanf(arg[3],"%FORMAT_F", &box[2]);
+    sscanf(arg[4],"%FORMAT_F", &box[3]);
+    sscanf(arg[5],"%FORMAT_F", &box[4]);
+    sscanf(arg[6],"%FORMAT_F", &box[5]);
     box_flag=1;
   }
   else {
@@ -52,13 +52,19 @@ void Atom::box_init(int narg, char **arg){
   
 }
 
-void Atom::add_region(int narg, char **arg){
+void Atom::add_region(class MD *md, int narg, char **arg){
   if (narg>0){
-    if (regions.count(arg[0])>0){
+    printf("%s\n", arg[0]);
+    if (regions.count(arg[0])==1){
       printf("ERROR: add region, region exists\n");
       exit(1);
     }
+    
     regions[arg[0]] = new Region(narg-1, arg+1);
+    
+    regions[arg[0]]->check(box);  
+    //printf("%f %f\n", box[0], box[1]);
+    //printf("%f %f\n", regions[arg[0]]->parameters[0], regions[arg[0]]->parameters[1]); 
   }
   else {
     printf("ERROR: add region\n");

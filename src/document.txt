@@ -14,6 +14,9 @@ box rect xlo xhi ylo yhi zlo zhi
 atom N mass1 mass2 ... massN
 -specific the atom types and their masses
 
-create bcc LC
+region region-ID shape parameters 
+-eg: region r1 rect 0.0 10.0 0.0 10.0 0.0 10.0 
+
+create type region 
 -bcc: crystal structure
 -LC: lattice constant
