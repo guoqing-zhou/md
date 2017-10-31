@@ -4,15 +4,17 @@
 #include "atom.h"
 
 
+
 using namespace std;
-Atom::Atom(class MD *md, MPI_Comm communicator) : Pointers(md) {
+Atom::Atom(class MD *md, MPI_Comm communicator) {
   box_flag=0;
-  
 }
 
 Atom::~Atom(){
   
 }
+
+
 
 void Atom::box_init(int narg, char **arg){
   if (strcmp(arg[0], "rect")==0 && narg==7){

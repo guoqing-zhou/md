@@ -10,11 +10,11 @@
 
 using namespace std;
 
-class IO : protected Pointers {
+class IO {
   public:
-    IO(class MD *, int, char **, MPI_Comm);
+    IO(class MD *,  int, char **, MPI_Comm);
     ~IO();
-    void init(); //create an empty
+    void init(class MD *, MPI_Comm); //create an empty
     void restart();
     void write_restart();
 
@@ -26,8 +26,7 @@ class IO : protected Pointers {
     char filename[filename_length], myfilename[filename_length];
     FILE *fp;
     void parse(class MD *md, char *);
-    void string_split(char *, int *, char **);
-    
+    int string_narg(char *);
     
 };
 

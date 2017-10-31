@@ -9,7 +9,7 @@ using namespace std;
 #define FORMAT_F f
 //used in sscanf scanf to read double/float data
 
-class Atom : protected Pointers {
+class Atom {
   public:
     FLOAT **x, **v, **f;
     FLOAT xlo, xhi, ylo, yhi, zlo, zhi;

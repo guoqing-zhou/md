@@ -5,10 +5,10 @@ md: main.o md.o io.o atom.o
 main.o: main.cpp
 	mpic++ -c main.cpp
 
-io.o: io.h io.cpp pointers.h
+io.o: io.h io.cpp 
 	mpic++ -c io.cpp
 	
-atom.o: atom.h atom.cpp pointers.h
+atom.o: atom.h atom.cpp 
 	mpic++ -c atom.cpp
 
 md.o: md.h md.cpp

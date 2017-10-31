@@ -2,27 +2,31 @@
 #include <stdio.h>
 #include "io.h"
 #include <string.h>
-
-#define DEBUG  
+#define DEBUG
+ 
 
 using namespace std;
 
-IO::IO(class MD *md, int narg, char **arg, MPI_Comm communicator) : Pointers(md) {
-  char buff[300];
+IO::IO(class MD *md, int narg, char **arg, MPI_Comm communicator) {
   MPI_Comm_rank(communicator, &my_rank);
   MPI_Comm_size(communicator, &num_proc);
   if (narg<2) exit(1);
   infile=arg[1];
+  
+}
 
+void IO::init(class MD *md, MPI_Comm communicator){
+  char buff[300];
   fp=fopen(infile, "r");
-  while((fgets(buff, 250, fp)) != NULL){
+  while((fgets(buff, 250, fp)) != NULL){   
     parse(md, buff);
   }
     
   fclose(fp);
+
   //MPI_Bcast(filename, filename_length*sizeof(char), MPI_CHAR, 0, communicator);
   //MPI_Bcast(file_flag, command_length*sizeof(char), MPI_CHAR, 0, communicator);
-  //MPI_Barrier(communicator);  
+  //MPI_Barrier(communicator); 
 }
 
 IO::~IO(){
@@ -30,42 +34,47 @@ IO::~IO(){
 }
 
 void IO::parse(class MD *md, char *line){
-  char **arg;
-  int narg;
-  string_split(line, &narg, arg);
-  if (strcmp(arg[0],"create")==0){
-    
+ 
+  char **arg=NULL;
+  int narg, n;
+  char *pch;
+  //split each line in the input file
+  narg=string_narg(line);
+  arg = (char **)malloc(sizeof(char *)*narg);
+  if (narg>0){
+    pch = strtok(line, " ");
+    arg[0] = pch;
+    for (n=1; n<narg; n++){
+      pch = strtok (NULL, " ");
+      arg[n] = pch;
+    }
   }
-  else if(strcmp(arg[0],"box")==0){
+  
+  if(strcmp(arg[0],"box")==0){
     md->atom->box_init(narg-1, arg+1);
   }
-  //printf("box: %f %f\n", atom->xlo, atom->xhi);
-  
-}
-
-void IO::string_split(char *str, int *narg, char **arg){
-  int n=0;
-  char *pch;
-  if (str[0]=='#') return;
-  pch = strtok(str, " ");
-  n++;
-  while (pch != NULL){
-    //printf ("%s\n",pch);
-    pch = strtok (NULL, " ");
-    n++;
+  else if (strcmp(arg[0],"create")==0){
+    
   }
-  arg = (char **)malloc(sizeof(char *)*n);
-  *narg = n;
   
-  pch = strtok(str, " ");
-  *(arg+n) = pch;
-  n++;
-  while (*(arg+n-1) != NULL){
-    //printf ("%s\n",*(arg+n-1));
-    pch = strtok (NULL, " ");
-    *(arg+n) = pch;
-    n++;
+  free(arg);
+}
+
+
+inline int IO::string_narg(char *line){
+  int l=strlen(line);
+  int n=0, i;
+  if(line[0] == '#') return 0;
+  for (i=0; i<l; i++){
+    if (line[i]=='\t') line[i]=' ';
+    if (line[i]=='\n') line[i]='\0';
   }
+  l=strlen(line);
+  if (line[0] != ' ') n=1;
+  for (i=1; i<l; i++){
+    if (line[i-1]==' ' && line[i]!=' ') n++;
+  }
+  return n;
 }
   
   
@@ -73,6 +82,4 @@ void IO::string_split(char *str, int *narg, char **arg){
 
 
 
-void IO::init(){
-  
-}
+
