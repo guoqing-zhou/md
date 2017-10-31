@@ -53,16 +53,17 @@ void Atom::box_init(int narg, char **arg){
 }
 
 void Atom::add_region(class MD *md, int narg, char **arg){
+  int ID;
   if (narg>0){
-    printf("%s\n", arg[0]);
-    if (regions.count(arg[0])==1){
+    sscanf(arg[0], "%d", &ID);
+    if (regions.count(ID)==1){
       printf("ERROR: add region, region exists\n");
       exit(1);
     }
     
-    regions[arg[0]] = new Region(narg-1, arg+1);
+    regions[ID] = new Region(narg-1, arg+1);
     
-    regions[arg[0]]->check(box);  
+    regions[ID]->check(box);  
     //printf("%f %f\n", box[0], box[1]);
     //printf("%f %f\n", regions[arg[0]]->parameters[0], regions[arg[0]]->parameters[1]); 
   }

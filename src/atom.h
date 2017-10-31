@@ -22,7 +22,7 @@ class Atom {
     // the rest of 56 bits are used for id
     // there is no MPI unsigned long long type
     
-    map<const char *, class Region *> regions;
+    map<int, class Region *> regions;
         
     Atom(class MD *, MPI_Comm);
     ~Atom();

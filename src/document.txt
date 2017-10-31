@@ -15,8 +15,14 @@ atom N mass1 mass2 ... massN
 -specific the atom types and their masses
 
 region region-ID shape parameters 
--eg: region r1 rect 0.0 10.0 0.0 10.0 0.0 10.0 
+-eg: region 1 rect 0.0 10.0 0.0 10.0 0.0 10.0 
+-region-ID should be an integer
 
-create type region 
--bcc: crystal structure
--LC: lattice constant
+create type region percent seed originx originy originz (three basis vectors)
+create 1 1 1.0 927434 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
+-type: atom type
+-region: region-ID, should be an integer
+-percent: percentage of atoms to keep
+-seed: random seed for randomly keep the atoms
+-origin: refercence point
+-basis vectors: va, vb, vc, crystal basis vectors
