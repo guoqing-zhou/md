@@ -32,6 +32,7 @@ class Atom {
     void atom_init(int, char **);
     void add_region(class MD *, int, char **);
     void set_max(int, char **);
+    void invert_matrix(FLOAT *, FLOAT *);
 
   private:
     void allocate_memory(int);

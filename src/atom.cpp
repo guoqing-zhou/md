@@ -84,6 +84,42 @@ void Atom::add_region(class MD *md, int narg, char **arg){
 }
 
 void Atom::create(int narg, char **arg){
+  /*
+  FLOAT M[9]={3.0, 2.0, 4.0,3.0,2.0,5.0,9.0,1.0,4.0};
+  FLOAT InvM[9];
+  int i, j;
+  invert_matrix(M, InvM);
+  for (i=0; i<3; i++){
+    for (j=0; j<3; j++){
+      printf("%f ", InvM[3*i+j]);
+    }
+    printf("\n");
+  }
+  */
+  //create type region percent seed origin (three basis vectors)
+  FLOAT origin[3], percent, basis[9], Inv[9];
+  int type, region, seed, i, ib[3][2];
+  if (narg==16){
+    sscanf(arg[0], "%d", &type);
+    if(strcmp(arg[1], "box")==0) region=0;
+    else sscanf(arg[1], "%d", &region);
+    sscanf(arg[2], "%FORMAT_F", &percent);
+    sscanf(arg[3], "%d", &seed);
+    for (i=0; i<3; i++){
+      sscanf(arg[4+i], "%FORMAT_F", &origin[i]);
+      sscanf(arg[7+i], "%FORMAT_F", &basis[i]);
+      sscanf(arg[10+i], "%FORMAT_F", &basis[3+i]);
+      sscanf(arg[13+i], "%FORMAT_F", &basis[6+i]);
+    }
+    invert_matrix(basis, Inv);
+
+  }
+  else{
+    printf("ERROR: Atom::create()\n");
+    exit(1);
+  }
+
+
 
 }
 
@@ -111,4 +147,37 @@ void Atom::allocate_memory(int N=MAX_NUM_ATOM){
   else{
     atom_flag=1;
   }
+}
+
+inline void Atom::invert_matrix(FLOAT *A, FLOAT *InvA){
+  //M and InvM are 3*3 matrix
+  FLOAT det, M[3][3], InvM[3][3];
+  int i, j;
+  for (i=0; i<3; i++){
+    for (j=0; j<3; j++){
+      M[i][j]=A[i*3+j];
+    }
+  }
+  det=M[0][0]*M[1][1]*M[2][2]+M[0][1]*M[1][2]*M[2][0]+M[0][2]*M[1][0]*M[2][1];
+  det-=(M[0][2]*M[1][1]*M[2][0]+M[0][1]*M[1][0]*M[2][2]+M[0][0]*M[1][2]*M[2][1]);
+  if (det==0.0){
+    printf("ERROR: Atom::invert_matrix(), basis vectors matrix det 0\n");
+    exit(1);
+  }
+  InvM[0][0]=(M[1][1]*M[2][2]-M[1][2]*M[2][1])/det;
+  InvM[0][1]=(M[0][2]*M[2][1]-M[0][1]*M[2][2])/det;
+  InvM[0][2]=(M[0][1]*M[1][2]-M[0][2]*M[1][1])/det;
+  InvM[1][0]=(M[1][2]*M[2][0]-M[1][0]*M[2][2])/det;
+  InvM[1][1]=(M[0][0]*M[2][2]-M[0][2]*M[2][0])/det;
+  InvM[1][2]=(M[0][2]*M[1][0]-M[0][0]*M[1][2])/det;
+  InvM[2][0]=(M[1][0]*M[2][1]-M[1][1]*M[2][0])/det;
+  InvM[2][1]=(M[0][1]*M[2][0]-M[0][0]*M[2][1])/det;
+  InvM[2][2]=(M[0][0]*M[1][1]-M[0][1]*M[1][0])/det;
+
+  for (i=0; i<3; i++){
+    for (j=0; j<3; j++){
+      InvA[i*3+j]=InvM[i][j];
+    }
+  }
+
 }

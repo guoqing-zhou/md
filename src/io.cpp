@@ -80,11 +80,11 @@ void IO::parse(class MD *md, char *line){
   }else if (strcmp(arg[0],"max_num_atoms")==0){
     md->atom->set_max(narg-1, arg+1);
   }
-  /*
+
   else if (strcmp(arg[0],"create")==0){
     md->atom->create(narg-1, arg+1);
   }
-  */
+
   if (arg != NULL) free(arg);
 }
 

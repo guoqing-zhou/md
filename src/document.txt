@@ -22,7 +22,7 @@ region region-ID shape parameters
 max_num_atoms 1000000
 -set the maximal number of atoms per processor, if not set, use the default value 1000000
 
-create type region percent seed originx originy originz (three basis vectors)
+create type region percent seed origin (three basis vectors)
 create 1 1 1.0 927434 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
 -type: atom type
 -region: region-ID, should be an integer
@@ -30,6 +30,10 @@ create 1 1 1.0 927434 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
 -seed: random seed for randomly keep the atoms
 -origin: refercence point
 -basis vectors: va, vb, vc, crystal basis vectors
+
+use the inverse of the basis vector matrix to find the index for the summit eight points (for region and local box)
+find the maximal upper index and minimal lower index for x y and z directions (for region and local box)
+get the intersection of these two sets of index, => then iterate through these index
 
 
 pointer: 8B for one pointer, whatever type it is
