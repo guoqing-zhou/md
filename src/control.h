@@ -9,4 +9,6 @@
 
 #define DEBUG
 
+#define MAX_NUM_ATOM 1000000
+
 #endif

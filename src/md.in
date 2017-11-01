@@ -1,7 +1,8 @@
-procs 1 1 1
 box rect 0.0 100.0 0.0 100.0 0.0 100.0
+procs 2 1 1
 atom 2 1.0 1.0
 region 1 rect 0.0 100.0 0.0 100.0 0.0 100.0
 create 1 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
 region 2 rect 1.0 00.0 1.0 2.0 1.0 2.0
-create bcc 1.0 
+max_num_atoms 1000000
+create bcc 1.0

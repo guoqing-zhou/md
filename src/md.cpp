@@ -11,7 +11,7 @@ MD::MD(int narg, char **arg, MPI_Comm communicator ){
 
   atom = new Atom(this, communicator);
   io = new IO(this, narg, arg, communicator);
-  
+
   io->init(this, communicator);
 }
 
@@ -27,11 +27,11 @@ void MD::procs(int narg, char **arg){
     sscanf(arg[2], "%d", &pnz);
   }
   else{
-    printf("ERROR: procs\n");
+    printf("ERROR: MD::procs()\n");
     exit(1);
   }
   if (num_proc != pnx*pny*pnz){
-    printf("ERROR: procs\n");
+    printf("ERROR: MD::procs()\n");
     exit(1);
   }
   //my_rank:0~num_proc
@@ -50,7 +50,19 @@ void MD::procs(int narg, char **arg){
   //printf("%d: %d %d %d %d %d %d\n", my_rank, proc_neigh[0], proc_neigh[1], proc_neigh[2],
   //                                  proc_neigh[3], proc_neigh[4], proc_neigh[5]);
   proc_flag=1;
-  
+  if (atom->box_flag==0){
+    printf("ERROR: MD::procs() box should be defined before setting procs\n");
+    exit(1);
+  }
+  else{
+    FLOAT *local=atom->box_local, *box=atom->box;
+    local[0]=(box[1]-box[0])/pnx*(proc_pos[0]+0.0)+box[0];
+    local[1]=(box[1]-box[0])/pnx*(proc_pos[0]+1.0)+box[0];
+    local[2]=(box[3]-box[2])/pny*(proc_pos[1]+0.0)+box[2];
+    local[3]=(box[3]-box[2])/pny*(proc_pos[1]+1.0)+box[2];
+    local[4]=(box[5]-box[4])/pnz*(proc_pos[2]+0.0)+box[4];
+    local[5]=(box[5]-box[4])/pnz*(proc_pos[2]+1.0)+box[4];
+  }
 }
 
 inline int MD::proc_rank(int nx, int ny, int nz){

@@ -3,7 +3,7 @@
 #include "io.h"
 #include <string.h>
 #define DEBUG
- 
+
 
 using namespace std;
 
@@ -12,16 +12,16 @@ IO::IO(class MD *md, int narg, char **arg, MPI_Comm communicator) {
   MPI_Comm_size(communicator, &num_proc);
   if (narg<2) exit(1);
   infile=arg[1];
-  
+
 }
 
 void IO::init(class MD *md, MPI_Comm communicator){
   char buff[300];
   fp=fopen(infile, "r");
-  while((fgets(buff, 250, fp)) != NULL){  
+  while((fgets(buff, 250, fp)) != NULL){
     parse(md, buff);
   }
-    
+
   fclose(fp);
 
 }
@@ -31,14 +31,14 @@ IO::~IO(){
 }
 
 void IO::parse(class MD *md, char *line){
- 
+
   char **arg=NULL;
   int narg, n;
   char *pch;
   //split each line in the input file
   narg=string_narg(line);
   if (narg==0) return;
-  
+
   arg = (char **)malloc(sizeof(char *)*narg);
   pch = strtok(line, " ");
   arg[0] = pch;
@@ -46,12 +46,21 @@ void IO::parse(class MD *md, char *line){
     pch = strtok (NULL, " ");
     arg[n] = pch;
   }
-  
+
   if(strcmp(arg[0],"box")==0){
     md->atom->box_init(narg-1, arg+1);
   }
   else if (strcmp(arg[0],"procs")==0){
     md->procs(narg-1, arg+1);
+    /*
+    FLOAT *box, *local;
+    box=md->atom->box;
+    local=md->atom->box_local;
+    if (my_rank==0){
+      printf("box: %f %f %f %f %f %f\n", box[0], box[1], box[2], box[3], box[4], box[5]);
+    }
+    printf("%d: %f %f %f %f %f %f\n", my_rank, local[0], local[1], local[2], local[3], local[4], local[5]);
+    */
   }
   else if (strcmp(arg[0],"atom")==0){
     md->atom->atom_init(narg-1, arg+1);
@@ -68,6 +77,8 @@ void IO::parse(class MD *md, char *line){
     }
 #endif
     */
+  }else if (strcmp(arg[0],"max_num_atoms")==0){
+    md->atom->set_max(narg-1, arg+1);
   }
   /*
   else if (strcmp(arg[0],"create")==0){
@@ -82,22 +93,16 @@ void IO::parse(class MD *md, char *line){
 inline int IO::string_narg(char *line){
   int l=strlen(line);
   int n=0, i;
-  if(line[0] == '#') return 0;
+  if(line[0] == '#' || l==0) return 0;
   for (i=0; i<l; i++){
     if (line[i]=='\t') line[i]=' ';
     if (line[i]=='\n') line[i]='\0';
   }
   l=strlen(line);
+  if( l==0) return 0;
   if (line[0] != ' ') n=1;
   for (i=1; i<l; i++){
     if (line[i-1]==' ' && line[i]!=' ') n++;
   }
   return n;
 }
-  
-  
-  
-
-
-
-

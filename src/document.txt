@@ -1,6 +1,6 @@
 #example input file: md.in
 
-units: 
+units:
 
 command keywords
 
@@ -8,15 +8,19 @@ command keywords
 procs nx ny nz
 -processes in each direction
 
-box rect xlo xhi ylo yhi zlo zhi 
+box rect xlo xhi ylo yhi zlo zhi
 -create box with the rect shape and size specified
 
 atom N mass1 mass2 ... massN
 -specific the atom types and their masses
 
-region region-ID shape parameters 
--eg: region 1 rect 0.0 10.0 0.0 10.0 0.0 10.0 
+region region-ID shape parameters
+-eg: region 1 rect 0.0 10.0 0.0 10.0 0.0 10.0
 -region-ID should be an integer
+
+
+max_num_atoms 1000000
+-set the maximal number of atoms per processor, if not set, use the default value 1000000
 
 create type region percent seed originx originy originz (three basis vectors)
 create 1 1 1.0 927434 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
@@ -26,3 +30,15 @@ create 1 1 1.0 927434 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 1.0
 -seed: random seed for randomly keep the atoms
 -origin: refercence point
 -basis vectors: va, vb, vc, crystal basis vectors
+
+
+pointer: 8B for one pointer, whatever type it is
+
+how to most efficiently save atom info
+
+1. struct: 4B for the struct header,
+struct atom{
+ long long id;
+ float x, y, z, vx, vy, vz, fx, fy, fz;
+}
+48B for this struct

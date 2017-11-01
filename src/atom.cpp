@@ -9,10 +9,16 @@ using namespace std;
 Atom::Atom(class MD *md, MPI_Comm communicator) {
   box_flag=0;
   types=0;
+  atom_flag=0;//check whether allocate memory for the atom info arrays
 }
 
 Atom::~Atom(){
-  
+  if(atom_flag){
+    free(x);
+    free(v);
+    free(f);
+    free(id);
+  }
 }
 
 void Atom::atom_init(int narg, char **arg){
@@ -30,7 +36,7 @@ void Atom::atom_init(int narg, char **arg){
     box_flag=1;
   }
   else {
-    printf("ERROR: atom init\n");
+    printf("ERROR: Atom::atom_init()\n");
     exit(1);
   }
 }
@@ -44,12 +50,16 @@ void Atom::box_init(int narg, char **arg){
     sscanf(arg[5],"%FORMAT_F", &box[4]);
     sscanf(arg[6],"%FORMAT_F", &box[5]);
     box_flag=1;
+    if(box[0]>box[1] || box[2]>=box[3] || box[4]>=box[5]){
+      printf("ERROR: Atom::box_init(), box boundary error\n");
+      exit(1);
+    }
   }
   else {
-    printf("ERROR: box\n");
+    printf("ERROR: Atom::box_init()\n");
     exit(1);
   }
-  
+
 }
 
 void Atom::add_region(class MD *md, int narg, char **arg){
@@ -60,19 +70,45 @@ void Atom::add_region(class MD *md, int narg, char **arg){
       printf("ERROR: add region, region exists\n");
       exit(1);
     }
-    
+
     regions[ID] = new Region(narg-1, arg+1);
-    
-    regions[ID]->check(box);  
+
+    regions[ID]->check(box);
     //printf("%f %f\n", box[0], box[1]);
-    //printf("%f %f\n", regions[arg[0]]->parameters[0], regions[arg[0]]->parameters[1]); 
+    //printf("%f %f\n", regions[arg[0]]->parameters[0], regions[arg[0]]->parameters[1]);
   }
   else {
-    printf("ERROR: add region\n");
+    printf("ERROR: Atom::add_region()\n");
     exit(1);
   }
 }
 
 void Atom::create(int narg, char **arg){
-  
+
+}
+
+void Atom::set_max(int narg, char **arg){
+  int N;
+  if (narg==1){
+    sscanf(arg[0], "%d", &N);
+    allocate_memory(N);
+  }
+  else{
+    printf("ERROR: Atom::set_max()\n");
+    exit(1);
+  }
+}
+
+void Atom::allocate_memory(int N=MAX_NUM_ATOM){
+  x = (FLOAT *)malloc(sizeof(FLOAT)*N*3);
+  v = (FLOAT *)malloc(sizeof(FLOAT)*N*3);
+  f = (FLOAT *)malloc(sizeof(FLOAT)*N*3);
+  id = (long long *)malloc(sizeof(long long)*N);
+  if (x==NULL || v==NULL || f==NULL){
+    printf("ERROR: Atom::allocate_memory()\n");
+    exit(1);
+  }
+  else{
+    atom_flag=1;
+  }
 }
