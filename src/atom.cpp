@@ -97,8 +97,12 @@ void Atom::create(int narg, char **arg){
   }
   */
   //create type region percent seed origin (three basis vectors)
-  FLOAT origin[3], percent, basis[9], Inv[9];
-  int type, region, seed, i, ib[3][2];
+  if (box_flag==0){
+    printf("ERROR: Atom::create(), box undefined\n");
+    exit(1);
+  }
+  FLOAT origin[3], percent, basis[9], Inv[9], iterate_ind[2][2], tmp[3];
+  int type, region, seed, i;
   if (narg==16){
     sscanf(arg[0], "%d", &type);
     if(strcmp(arg[1], "box")==0) region=0;

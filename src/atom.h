@@ -36,6 +36,7 @@ class Atom {
 
   private:
     void allocate_memory(int);
+    void create_iterate(FLOAT *, FLOAT *, FLOAT *);
 
 };
 
